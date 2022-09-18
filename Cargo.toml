@@ -1,0 +1,16 @@
+[package]
+name = "sg_search"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+fst = { version = "0.4.7", features = ["levenshtein"] }
+regex = "1.5.4"
+lazy_static = "1.4.0"
+jieba-rs = "0.6.5"
+memmap2 = "0.5.7"
+fs2 = "0.4.3"
+fake = "2.5"
+rand = "0.8"
