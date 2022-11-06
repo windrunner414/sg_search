@@ -1,19 +1,21 @@
+use crate::store::Result;
+use fs2::FileExt;
 use std::fs::File;
 use std::ops::{Deref, DerefMut};
-use fs2::FileExt;
-use crate::store::{Result};
 
 #[derive(Debug)]
 pub struct FileLock {
-    file: File
+    file: File,
 }
 
+#[derive(Debug)]
 pub struct FileLockReadGuard<'a> {
-    file: &'a mut File
+    file: &'a mut File,
 }
 
+#[derive(Debug)]
 pub struct FileLockWriteGuard<'a> {
-    file: &'a mut File
+    file: &'a mut File,
 }
 
 impl FileLock {
@@ -23,22 +25,30 @@ impl FileLock {
 
     pub fn read(&mut self) -> Result<FileLockReadGuard> {
         self.file.lock_shared()?;
-        Ok(FileLockReadGuard { file: &mut self.file })
+        Ok(FileLockReadGuard {
+            file: &mut self.file,
+        })
     }
 
-    pub fn try_read(&mut self) ->Result<FileLockReadGuard> {
+    pub fn try_read(&mut self) -> Result<FileLockReadGuard> {
         self.file.try_lock_shared()?;
-        Ok(FileLockReadGuard { file: &mut self.file })
+        Ok(FileLockReadGuard {
+            file: &mut self.file,
+        })
     }
 
     pub fn write(&mut self) -> Result<FileLockWriteGuard> {
         self.file.lock_exclusive()?;
-        Ok(FileLockWriteGuard { file: &mut self.file })
+        Ok(FileLockWriteGuard {
+            file: &mut self.file,
+        })
     }
 
-    pub fn try_write(&mut self) ->Result<FileLockWriteGuard> {
+    pub fn try_write(&mut self) -> Result<FileLockWriteGuard> {
         self.file.try_lock_exclusive()?;
-        Ok(FileLockWriteGuard { file: &mut self.file })
+        Ok(FileLockWriteGuard {
+            file: &mut self.file,
+        })
     }
 }
 
