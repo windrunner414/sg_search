@@ -1,10 +1,10 @@
 use crate::store::{Error, Result};
 use bincode::config::Config as BinCodeConfig;
-use bincode::{decode_from_reader, decode_from_slice, Decode};
+use bincode::{decode_from_slice, decode_from_std_read, encode_into_std_write, Decode, Encode};
 use memmap2::{Mmap, MmapOptions};
 use std::borrow::Cow;
 use std::fs::{File, OpenOptions};
-use std::io::{BufReader, Read, Seek, SeekFrom, Write};
+use std::io::{BufReader, BufWriter, Read, Seek, SeekFrom, Write};
 use std::path::Path;
 
 /// Although read may modify some internal state (e.g. "file.seek()")
@@ -17,9 +17,14 @@ pub trait ReadableStore {
 }
 
 pub trait WriteableStore {
-    fn write_bytes(&mut self, offset: u64, buf: &[u8]) -> Result<()>;
+    fn write_bytes(&mut self, buf: &[u8], offset: u64) -> Result<()>;
 
     fn append_bytes(&mut self, buf: &[u8]) -> Result<u64>;
+
+    fn write<E: Encode, C: BinCodeConfig>(&mut self, data: E, offset: u64, config: C)
+        -> Result<()>;
+
+    fn append<E: Encode, C: BinCodeConfig>(&mut self, data: E, config: C) -> Result<u64>;
 }
 
 #[derive(Debug)]
@@ -55,13 +60,13 @@ impl ReadableStore for FileStore {
         (&self.file).seek(SeekFrom::Start(offset))?;
         // TODO: reuse buffer
         // it's safe to use a BufReader because we don't expect the data to be modified while being read
-        let reader = BufReader::new(&self.file);
-        Ok(decode_from_reader(reader, config)?)
+        let mut reader = BufReader::new(&self.file);
+        Ok(decode_from_std_read(&mut reader, config)?)
     }
 }
 
 impl WriteableStore for FileStore {
-    fn write_bytes(&mut self, offset: u64, buf: &[u8]) -> Result<()> {
+    fn write_bytes(&mut self, buf: &[u8], offset: u64) -> Result<()> {
         self.file.seek(SeekFrom::Start(offset))?;
         self.file.write_all(buf)?;
         Ok(())
@@ -69,7 +74,25 @@ impl WriteableStore for FileStore {
 
     fn append_bytes(&mut self, buf: &[u8]) -> Result<u64> {
         let offset = self.file.metadata()?.len();
-        self.write_bytes(offset, buf)?;
+        self.write_bytes(buf, offset)?;
+        Ok(offset)
+    }
+
+    fn write<E: Encode, C: BinCodeConfig>(
+        &mut self,
+        data: E,
+        offset: u64,
+        config: C,
+    ) -> Result<()> {
+        self.file.seek(SeekFrom::Start(offset))?;
+        let mut writer = BufWriter::new(&self.file);
+        encode_into_std_write(data, &mut writer, config)?;
+        Ok(())
+    }
+
+    fn append<E: Encode, C: BinCodeConfig>(&mut self, data: E, config: C) -> Result<u64> {
+        let offset = self.file.metadata()?.len();
+        self.write(data, offset, config)?;
         Ok(offset)
     }
 }
@@ -142,7 +165,7 @@ mod tests {
             let data = (2..100000).fake::<String>();
 
             let mut file_store = FileStore::open(path).unwrap();
-            file_store.write_bytes(0, data.as_bytes()).unwrap();
+            file_store.write_bytes(data.as_bytes(), 0).unwrap();
             let d1 = file_store.read_bytes(1, data.len() as u64 / 2).unwrap();
             assert_eq!(&*d1, &data.as_bytes()[1..(data.len() / 2) + 1]);
 
