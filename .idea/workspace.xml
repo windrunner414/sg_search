@@ -15,12 +15,8 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea88fe9f-cc6e-4f4e-afc5-0706e0f5efcb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+    <list default="true" id="ea88fe9f-cc6e-4f4e-afc5-0706e0f5efcb" name="Changes" comment="update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index/posting_block.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/posting_block.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/packed_id_array.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/packed_int_array.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/store/skip_list.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/skip_list.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/store/store_io.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/store_io.rs" afterDir="false" />
     </list>
@@ -214,8 +210,16 @@
       <updated>1663442625449</updated>
       <workItem from="1663442626775" duration="58535000" />
       <workItem from="1665892020750" duration="1205000" />
-      <workItem from="1667698692307" duration="31218000" />
+      <workItem from="1667698692307" duration="44900000" />
     </task>
+    <task id="LOCAL-00001" summary="update">
+      <created>1667886700601</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1667886700601</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -234,6 +238,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="update" />
+    <option name="LAST_COMMIT_MESSAGE" value="update" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -33,6 +33,7 @@ pub struct FileStore {
 }
 
 impl FileStore {
+    #[inline]
     pub fn open<P: AsRef<Path>>(file_path: P) -> Result<Self> {
         Ok(FileStore {
             file: OpenOptions::new()
@@ -45,6 +46,7 @@ impl FileStore {
 }
 
 impl ReadableStore for FileStore {
+    #[inline]
     fn read_bytes(&self, offset: u64, size: u64) -> Result<Cow<[u8]>> {
         let size: usize = size.try_into().map_err(|_| Error::OutOfRange)?;
 
@@ -56,6 +58,7 @@ impl ReadableStore for FileStore {
         Ok(Cow::Owned(buf))
     }
 
+    #[inline]
     fn read<D: Decode, C: BinCodeConfig>(&self, offset: u64, config: C) -> Result<D> {
         (&self.file).seek(SeekFrom::Start(offset))?;
         // TODO: reuse buffer
@@ -66,18 +69,21 @@ impl ReadableStore for FileStore {
 }
 
 impl WriteableStore for FileStore {
+    #[inline]
     fn write_bytes(&mut self, buf: &[u8], offset: u64) -> Result<()> {
         self.file.seek(SeekFrom::Start(offset))?;
         self.file.write_all(buf)?;
         Ok(())
     }
 
+    #[inline]
     fn append_bytes(&mut self, buf: &[u8]) -> Result<u64> {
         let offset = self.file.metadata()?.len();
         self.write_bytes(buf, offset)?;
         Ok(offset)
     }
 
+    #[inline]
     fn write<E: Encode, C: BinCodeConfig>(
         &mut self,
         data: E,
@@ -90,6 +96,7 @@ impl WriteableStore for FileStore {
         Ok(())
     }
 
+    #[inline]
     fn append<E: Encode, C: BinCodeConfig>(&mut self, data: E, config: C) -> Result<u64> {
         let offset = self.file.metadata()?.len();
         self.write(data, offset, config)?;
@@ -103,6 +110,7 @@ pub struct MMapStore {
 }
 
 impl MMapStore {
+    #[inline]
     pub fn open<P: AsRef<Path>>(file_path: P) -> Result<Self> {
         let file = File::open(file_path)?;
         let mmap = unsafe { MmapOptions::new().map(&file)? };
@@ -111,6 +119,7 @@ impl MMapStore {
 }
 
 impl ReadableStore for MMapStore {
+    #[inline]
     fn read_bytes(&self, offset: u64, size: u64) -> Result<Cow<[u8]>> {
         let offset: usize = offset.try_into().map_err(|_| Error::OutOfRange)?;
         let size: usize = size.try_into().map_err(|_| Error::OutOfRange)?;
@@ -126,6 +135,7 @@ impl ReadableStore for MMapStore {
         }
     }
 
+    #[inline]
     fn read<D: Decode, C: BinCodeConfig>(&self, offset: u64, config: C) -> Result<D> {
         let offset: usize = offset.try_into().map_err(|_| Error::OutOfRange)?;
 
