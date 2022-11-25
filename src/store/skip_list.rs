@@ -207,6 +207,11 @@ impl<'a, S: ReadableStore + WriteableStore, T: Encode + Decode> Writer<'a, S, T>
         self.store.read(self.offset, BIN_CODE_CONFIG)
     }
 
+    #[inline]
+    fn node(&self, offset: u64) -> Result<Node<T>> {
+        self.store.read(offset, BIN_CODE_CONFIG)
+    }
+
     pub fn push_back(&mut self, data: T) -> Result<()> {
         let level = random_level();
         let mut metadata = self.metadata()?;
@@ -224,7 +229,7 @@ impl<'a, S: ReadableStore + WriteableStore, T: Encode + Decode> Writer<'a, S, T>
                 heads.forward = offset;
                 heads.backward = offset;
             } else {
-                let mut back_node: Node<T> = self.store.read(heads.backward, BIN_CODE_CONFIG)?;
+                let mut back_node = self.node(heads.backward)?;
                 unsafe {
                     back_node.levels.get_unchecked_mut(i).forward = offset;
                 }
@@ -233,6 +238,8 @@ impl<'a, S: ReadableStore + WriteableStore, T: Encode + Decode> Writer<'a, S, T>
                 heads.backward = offset;
             }
         }
+        metadata.len += 1;
+        metadata.level = cmp::max(metadata.level, level);
         self.store.write(&metadata, self.offset, BIN_CODE_CONFIG)?;
 
         Ok(())
@@ -248,6 +255,8 @@ impl<'a, S: ReadableStore + WriteableStore, T: Encode + Decode> Writer<'a, S, T>
 mod tests {
     use super::*;
     use crate::store::{FileStore, MMapStore};
+    use fake::Fake;
+    use std::collections::HashSet;
     use std::fs;
     use std::fs::OpenOptions;
     use std::path::Path;
@@ -267,13 +276,44 @@ mod tests {
 
     #[test]
     fn skip_list_1() {
-        for _ in 0..20 {
+        for _ in 0..5 {
             clear_file();
             let path = Path::new(TEST_FILE_PATH);
 
             let mut file_store = FileStore::open(path).unwrap();
+            file_store.write_bytes(&[1], 0).unwrap();
+            let mut writer = Writer::make_append(&mut file_store).unwrap();
 
-            let mut mmap_store = MMapStore::open(path).unwrap();
+            let mut n = (-100..100).fake::<i64>();
+            let mut data = HashSet::new();
+            for i in 0..(1000..5000).fake() {
+                n += (1..10).fake::<i64>();
+                writer.push_back(n).unwrap();
+                data.insert(n);
+            }
+
+            let mmap_store = MMapStore::open(path).unwrap();
+            let reader: Reader<MMapStore, i64> = Reader::new(&mmap_store, 1);
+            let metadata = reader.metadata().unwrap();
+
+            assert_eq!(metadata.len, data.len() as u64);
+
+            let last = i64::MIN;
+            for i in reader.iter().unwrap() {
+                let curr = i.unwrap();
+                assert!(curr > last);
+                assert!(data.contains(&curr));
+            }
+
+            for i in 0..5000 {
+                let f = (-150..n).fake::<i64>();
+                let result = reader.find(|i| i.cmp(&f)).unwrap();
+                if data.contains(&f) {
+                    assert_eq!(result, Some(f));
+                } else {
+                    assert_eq!(result, None);
+                }
+            }
         }
     }
 }
