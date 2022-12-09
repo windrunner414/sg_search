@@ -25,6 +25,8 @@ where
         }
     }
 
+    /// return all valid tokens
+    /// Result<(HashMap<token, token_num>, total_token_num)>
     pub fn analyze(&self, text: &str) -> Result<(HashMap<String, usize>, usize)> {
         let text = self.char_filter.filter(text);
         let mut tokens = HashMap::<String, usize>::new();

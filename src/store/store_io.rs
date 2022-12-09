@@ -179,7 +179,7 @@ mod tests {
             let d1 = file_store.read_bytes(1, data.len() as u64 / 2).unwrap();
             assert_eq!(&*d1, &data.as_bytes()[1..(data.len() / 2) + 1]);
 
-            let mut mmap_store = MMapStore::open(path).unwrap();
+            let mmap_store = MMapStore::open(path).unwrap();
             let d2 = mmap_store
                 .read_bytes(data.len() as u64 / 2, (data.len() - data.len() / 2) as u64)
                 .unwrap();

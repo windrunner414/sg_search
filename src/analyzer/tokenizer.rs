@@ -6,13 +6,13 @@ pub trait Tokenizer {
 
 #[derive(Debug)]
 pub struct JiebaTokenizer {
-    jieba: Jieba
+    jieba: Jieba,
 }
 
 impl JiebaTokenizer {
     pub fn new() -> Self {
         JiebaTokenizer {
-            jieba: Jieba::new()
+            jieba: Jieba::new(),
         }
     }
 }

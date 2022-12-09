@@ -5,8 +5,11 @@ pub const POSTING_BLOCK_MAX_SIZE: usize = 128;
 
 #[derive(Debug, Encode, Decode)]
 pub struct PostingsInfo {
+    /// Self-incrementing ID
     pub id: u64,
+    /// See document.rs
     pub external_id: u64,
+    /// term frequency
     pub tf: u16,
 }
 

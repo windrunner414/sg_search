@@ -5,9 +5,8 @@ use crate::analyzer::Analyzer;
 use crate::index::constants::{
     BIN_CODE_CONFIG, FST_FILENAME, TERM_FILENAME, TERM_FILE_MAGIC_NUMBER,
 };
-use crate::index::postings::{PostingsBlock, PostingsInfo};
+use crate::index::postings::PostingsBlock;
 use crate::index::term_index;
-use crate::query::score::{Score, TermPriorityCalculator, TfIdfTermPriorityCalculator};
 use crate::query::{Error, Result};
 use crate::store::skip_list;
 use crate::store::{FileStore, ReadableStore};
@@ -20,6 +19,7 @@ use std::path::PathBuf;
 
 #[derive(Debug)]
 pub struct Config {
+    /// the directory of index files
     pub index_dir: PathBuf,
 }
 
@@ -28,6 +28,7 @@ impl Config {
         Self { index_dir }
     }
 
+    /// return the full path of the index file (index_dir + filename)
     pub fn build_file_path(&self, filename: &str) -> PathBuf {
         let mut buf = self.index_dir.clone();
         buf.push(filename);
@@ -43,11 +44,11 @@ where
     I: Tokenizer,
 {
     analyzer: Analyzer<C, T, I>,
-    config: Config,
+    // config: Config,
     fst: fst::Map<Mmap>,
     terms: FileStore,
-    doc_num: u64,
-    term_priority_calculator: TfIdfTermPriorityCalculator,
+    // doc_num: u64,
+    // term_priority_calculator: TfIdfTermPriorityCalculator,
 }
 
 impl<C, T, I> Query<C, T, I>
@@ -65,22 +66,23 @@ where
         let header: term_index::Header = terms.read(0, BIN_CODE_CONFIG)?;
         check_term_index(&header)?;
 
-        let doc_num = header.doc_num;
-
-        let term_priority_calculator = TfIdfTermPriorityCalculator::new(doc_num);
+        // let doc_num = header.doc_num;
+        //
+        // let term_priority_calculator = TfIdfTermPriorityCalculator::new(doc_num);
 
         let query = Query {
             analyzer,
-            config,
+            // config,
             fst,
             terms,
-            doc_num,
-            term_priority_calculator,
+            // doc_num,
+            // term_priority_calculator,
         };
 
         Ok(query)
     }
 
+    /// return all posting in this skip list
     #[inline]
     fn find_posting_list(&mut self, offset: u64) -> Result<PostingsBlock> {
         // TODO: do not read all postings
@@ -94,6 +96,7 @@ where
         Ok(list)
     }
 
+    /// return all posting that contains the specific pattern
     #[inline]
     fn query_term_postings<A: fst::Automaton>(
         &mut self,
@@ -126,6 +129,7 @@ where
         )
     }
 
+    /// Score and sort all search results and return the results in `range`
     pub fn query<A: fst::Automaton>(
         &mut self,
         sentence: &str,
@@ -161,6 +165,7 @@ where
     }
 }
 
+/// check if this is a valid term index file
 fn check_term_index(header: &term_index::Header) -> Result<()> {
     if header.magic != TERM_FILE_MAGIC_NUMBER {
         Err(Error::Incompatible)

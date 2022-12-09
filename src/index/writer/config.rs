@@ -1,8 +1,8 @@
-use crate::index::constants::{FST_FILENAME, TERM_FILENAME};
 use std::path::PathBuf;
 
 #[derive(Debug)]
 pub struct Config {
+    /// the directory of index files
     pub output_dir: PathBuf,
 }
 

@@ -15,33 +15,22 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea88fe9f-cc6e-4f4e-afc5-0706e0f5efcb" name="Changes" comment="complete skip list">
-      <change afterPath="$PROJECT_DIR$/src/index/constants.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/index/term_index.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/index/writer/config.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/index/writer/error.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/index/writer/mod.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/query/error.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/query/mod.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/query/query.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/query/score.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test_documents/1" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test_documents/2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test_documents/3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test_documents/4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test_documents/5" afterDir="false" />
+    <list default="true" id="ea88fe9f-cc6e-4f4e-afc5-0706e0f5efcb" name="Changes" comment="update">
+      <change afterPath="$PROJECT_DIR$/RUN.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test_documents/6" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/analyzer/analyzer.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/analyzer/analyzer.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/analyzer/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/analyzer/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/analyzer/tokenizer.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/analyzer/tokenizer.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index/document.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/document.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index/norm.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index/posting_block.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/postings.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index/postings.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/postings.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index/term_index.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/term_index.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index/writer/config.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/writer/config.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index/writer/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/writer/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/file_lock.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/file_lock.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/packed_int_array.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/query/query.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/query/query.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/query/score.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/query/score.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/skip_list.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/skip_list.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/store_io.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/store_io.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -237,7 +226,7 @@
       <workItem from="1665892020750" duration="1205000" />
       <workItem from="1667698692307" duration="67499000" />
       <workItem from="1670558581174" duration="731000" />
-      <workItem from="1670559316320" duration="531000" />
+      <workItem from="1670559316320" duration="2923000" />
     </task>
     <task id="LOCAL-00001" summary="update">
       <created>1667886700601</created>
@@ -260,7 +249,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669346768067</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="update">
+      <created>1670560064360</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1670560064360</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -279,10 +275,10 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="update" />
     <MESSAGE value="update skip list" />
     <MESSAGE value="complete skip list" />
-    <option name="LAST_COMMIT_MESSAGE" value="complete skip list" />
+    <MESSAGE value="update" />
+    <option name="LAST_COMMIT_MESSAGE" value="update" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

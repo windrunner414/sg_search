@@ -47,7 +47,7 @@ where
     I: Tokenizer,
 {
     analyzer: Analyzer<C, T, I>,
-    config: Config,
+    // config: Config,
     dict: TermDict,
     doc_num: u64,
     term_file: FileStore,
@@ -84,12 +84,12 @@ where
             .write(true)
             .create(true)
             .open(config.build_file_path(FST_FILENAME).to_str().unwrap())?;
-        let mut term_file =
+        let term_file =
             FileStore::open(config.build_file_path(TERM_FILENAME).to_str().unwrap())?;
 
         let mut w = Writer {
             analyzer,
-            config,
+            // config,
             dict: TermDict::new(),
             doc_num: 0,
             term_file,

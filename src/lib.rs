@@ -17,7 +17,7 @@ mod tests {
     use fst::automaton::Levenshtein;
     use std::fs;
     use std::fs::File;
-    use std::io::Read;
+    use std::io::{BufRead, BufReader, Read};
     use std::path::{Path, PathBuf};
     use std::str::FromStr;
 
@@ -75,13 +75,23 @@ mod tests {
         );
         let mut query =
             query::Query::new(analyzer, query::Config::new(PathBuf::from(TEST_INDEX_DIR))).unwrap();
-        println!(
-            "{:?}",
-            query.query(
-                "James",
+        let result = query
+            .query(
+                "Canada",
                 &|w| Levenshtein::new(w, if w.chars().count() > 4 { 1 } else { 0 }).ok(),
                 0..3,
             )
-        )
+            .unwrap();
+        for id in result {
+            let mut doc_file = PathBuf::from(TEST_DOCUMENTS_DIR);
+            doc_file.push(id.to_string());
+            let first_line = BufReader::new(File::open(doc_file).unwrap())
+                .lines()
+                .next()
+                .unwrap()
+                .unwrap();
+            println!("id: {}, first_line: {}", id, first_line);
+            println!();
+        }
     }
 }

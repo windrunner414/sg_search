@@ -95,10 +95,10 @@ impl<'a, S: ReadableStore, T: Encode + Decode> Reader<'a, S, T> {
         }
     }
 
-    #[inline]
-    pub fn offset(&self) -> u64 {
-        self.offset
-    }
+    // #[inline]
+    // pub fn offset(&self) -> u64 {
+    //     self.offset
+    // }
 
     #[inline]
     fn metadata(&self) -> Result<MetaData> {
@@ -245,10 +245,10 @@ impl<'a, S: ReadableStore + WriteableStore, T: Encode + Decode> Writer<'a, S, T>
         Ok(())
     }
 
-    #[inline]
-    pub fn into_reader(self) -> Reader<'a, S, T> {
-        Reader::new(self.store, self.offset)
-    }
+    // #[inline]
+    // pub fn into_reader(self) -> Reader<'a, S, T> {
+    //     Reader::new(self.store, self.offset)
+    // }
 }
 
 #[cfg(test)]
@@ -286,7 +286,7 @@ mod tests {
 
             let mut n = (-100..100).fake::<i64>();
             let mut data = HashSet::new();
-            for i in 0..(1000..5000).fake() {
+            for _ in 0..(1000..5000).fake() {
                 n += (1..10).fake::<i64>();
                 writer.push_back(n).unwrap();
                 data.insert(n);
@@ -305,7 +305,7 @@ mod tests {
                 assert!(data.contains(&curr));
             }
 
-            for i in 0..5000 {
+            for _ in 0..5000 {
                 let f = (-150..n).fake::<i64>();
                 let result = reader.find(|i| i.cmp(&f)).unwrap();
                 if data.contains(&f) {
