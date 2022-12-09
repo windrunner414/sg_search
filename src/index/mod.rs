@@ -1,3 +1,5 @@
-mod document;
-mod norm;
-mod posting_block;
+pub mod constants;
+pub mod document;
+pub mod postings;
+pub mod writer;
+pub mod term_index;
